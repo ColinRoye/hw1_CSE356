@@ -1,0 +1,20 @@
+---
+- hosts: app
+  become: true
+  tasks:
+    - name: ensure nginx is at the latest version
+      apt: name=nginx state=latest
+    - name: Removing
+      file:
+          path: /var/www/html
+          state: absent
+    - git:
+        repo: https://github.com/ColinRoye/HW0.git
+        dest: /var/www/html
+        force: yes
+    - name: add hw1.yml
+      template:
+        src: ./hw1.yml
+        dest: /var/www/html/hw1.yml
+    - name: restart nginx
+      service: name=nginx state=restarted
